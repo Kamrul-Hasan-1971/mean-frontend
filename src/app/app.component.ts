@@ -12,7 +12,10 @@ import { AuthService } from "./auth/auth.service";
 export class AppComponent implements OnInit {
   // hasError = false;
   // private errorSub: Subscription;
-
+  // totalPosts = 0;
+  // postsPerPage = 2;
+  // currentPage = 1;
+  // pageSizeOptions = [1, 2, 5, 10];
   constructor(
     private authService: AuthService,
     // private errorService: ErrorService

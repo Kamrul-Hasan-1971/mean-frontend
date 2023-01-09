@@ -35,6 +35,8 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoading = true;
+    this.postsPerPage = parseInt(localStorage.getItem("postsPerPage")) || 2;
+    this.currentPage = parseInt(localStorage.getItem("currentPage")) || 1;
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
     this.userId = this.authService.getUserId();
     this.postsSub = this.postsService
@@ -43,6 +45,10 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.totalPosts = postData.postCount;
         this.posts = postData.posts;
+        for( let i = 0 ; i < this.posts.length; i++){
+          this.posts[i].isImageLoading = true;
+          this.loadImageAsync(i);
+        }
       });
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
@@ -52,11 +58,26 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.userId = this.authService.getUserId();
       });
   }
+  loadImageAsync(i) {
+    var downloadingImage = new Image();
+    downloadingImage.onload = () => {
+      const imgContainer: HTMLElement = document.getElementById(this.posts[i].id) as HTMLElement;
+      imgContainer.appendChild(downloadingImage);
+      this.posts[i].isImageLoading = false;
+    };
+    downloadingImage.onerror = (err) => {
+      console.error("Error during loading image from server, error", err, "vehicle details", this.posts[i].imagePath);
+    }
+    downloadingImage.src = this.posts[i].imagePath;
+    downloadingImage.className = "post-image-img"
+  }
 
   onChangedPage(pageData: PageEvent) {
     this.isLoading = true;
     this.currentPage = pageData.pageIndex + 1;
     this.postsPerPage = pageData.pageSize;
+    localStorage.setItem("postsPerPage",""+this.postsPerPage);
+    localStorage.setItem("currentPage",""+this.currentPage);
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
   }
 

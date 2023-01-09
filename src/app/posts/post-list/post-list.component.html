@@ -1,5 +1,5 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
-<mat-accordion multi="true" *ngIf="posts.length > 0 && !isLoading">
+<!-- <mat-accordion multi="true" *ngIf="posts.length > 0 && !isLoading">
   <mat-expansion-panel *ngFor="let post of posts">
     <mat-expansion-panel-header>
       {{ post.title }}
@@ -13,7 +13,34 @@
       <button mat-button color="warn" (click)="onDelete(post.id)">DELETE</button>
     </mat-action-row>
   </mat-expansion-panel>
-</mat-accordion>
-<mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
-  *ngIf="posts.length > 0"></mat-paginator>
-<p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">No posts added yet!</p>
+</mat-accordion> -->
+<div >
+  <div *ngFor="let post of posts; let i = index; let last = last" style="margin-bottom: 20px;">
+    <mat-card style="padding-bottom: 16px; background: #30403c;">
+      <!-- <mat-card-header>
+        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+        <mat-card-title>Shiba Inu</mat-card-title>
+      </mat-card-header> -->
+      <mat-card-content>
+        <div class="post-image" id = {{post.id}}>
+          <!-- <img [src]="post.imagePath" [alt]="post.title"> -->
+        </div>
+      </mat-card-content>
+      <div *ngIf="userIsAuthenticated && userId === post.creator && !post.isImageLoading" style="margin-top: 20px;">
+        <mat-divider style="background: lightcyan;"></mat-divider>
+        <mat-card-actions align="end">
+          <a style="color: lightgray;" mat-button color="primary" [routerLink]="['/edit', post.id]">EDIT</a>
+          <button style="color: brown; font-weight: 900;" mat-button  (click)="onDelete(post.id)">DELETE</button>
+        </mat-card-actions>
+      </div>
+      <mat-card-footer>
+        <mat-progress-bar style="background: brown;" *ngIf="post.isImageLoading" mode="indeterminate"></mat-progress-bar>
+      </mat-card-footer>
+    </mat-card>
+  </div>
+</div>
+  <mat-paginator style="background: gainsboro;" [pageIndex]="currentPage-1" [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
+    *ngIf="posts.length > 0"></mat-paginator>
+  <p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">No posts added yet!</p>
+
+
