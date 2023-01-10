@@ -11,7 +11,6 @@ import { ErrorInterceptor } from "./error-interceptor";
 import { ErrorComponent } from "./error/error.component";
 import { AngularMaterialModule } from "./angular-material.module";
 import { PostsModule } from "./posts/posts.module";
-import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
@@ -25,8 +24,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     BrowserAnimationsModule,
     HttpClientModule,
     AngularMaterialModule,
-    PostsModule,
-    FlexLayoutModule
+    PostsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
