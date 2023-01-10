@@ -37,9 +37,7 @@ export class PostCreateComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       });
     this.form = new FormGroup({
-      title: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(3)]
-      }),
+      title: new FormControl("1"),
       content: new FormControl(null, { validators: [Validators.required] }),
       image: new FormControl(null, {
         validators: [Validators.required],

@@ -1,18 +1,39 @@
-<mat-card>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form (submit)="onSignup(signupForm)" #signupForm="ngForm" *ngIf="!isLoading">
-    <mat-form-field>
-      <input matInput name="email" ngModel type="email" placeholder="E-Mail" #emailInput="ngModel" required email>
-      <mat-error *ngIf="emailInput.invalid">Please enter a valid email.</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <input type="password" name="password" ngModel matInput placeholder="Password" #passwordInput="ngModel" required>
-      <mat-error *ngIf="passwordInput.invalid">Please enter a valid password.</mat-error>
-    </mat-form-field>
-    <mat-form-field>
-      <input type="password" name="confirmPassword" ngModel matInput placeholder="Confirm Password" #confirmPassword="ngModel" required>
-      <mat-error *ngIf="confirmPassword.invalid">Please enter a valid password.</mat-error>
-    </mat-form-field>
-    <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">Signup</button>
-  </form>
+<mat-card style="height: 410px; width: 400px; padding: 20px; background: #a52a2aad;">
+  <mat-card-title style="color: white;">Signup</mat-card-title>
+<mat-card-content>
+<form style="width: 100%;" [formGroup]="signUpForm" (ngSubmit)="onSignup()">
+<p>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input type="text" matInput  formControlName="email">
+    <mat-error style="color: antiquewhite;" *ngIf="f['email'].errors && f['email']['errors']['required']">Email is required</mat-error>
+    <mat-error style="color: antiquewhite;" *ngIf="f['email'].errors && f['email']['errors']['email']">Email is invalid</mat-error>
+  </mat-form-field>
+</p>
+<p>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input type="password" matInput formControlName="password">
+    <mat-error style="color: antiquewhite;" *ngIf="f['password'].errors && f['password']['errors']['required']">Password is required</mat-error>
+  </mat-form-field>
+</p>
+<p>
+  <mat-form-field>
+    <mat-label>Confirm Password</mat-label>
+    <input type="password" matInput formControlName="confirmPassword">
+    <mat-error style="color: antiquewhite;" *ngIf="f['confirmPassword'].errors && f['confirmPassword']['errors']['required']">Confirm Password is required</mat-error>
+  </mat-form-field>
+</p>
+
+<div class="button" style="font-size: 20px;">
+  <button type="submit"  mat-raised-button color="primary" class="signup-button">
+    Submit
+    <mat-icon *ngIf="isLoading"><mat-spinner color="accent" diameter="18">
+    </mat-spinner></mat-icon>
+  </button>
+  <!-- <button type="submit" mat-button style="color: white; display:inline; width: auto;"><mat-spinner style="height: 20px;" *ngIf="isLoading"></mat-spinner>Submit</button> -->
+</div>
+</form>
+
+</mat-card-content>
 </mat-card>

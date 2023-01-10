@@ -5,3 +5,64 @@ mat-form-field {
 mat-spinner {
   margin: auto;
 }
+
+
+:host {
+  display: flex;
+  justify-content: center;
+  margin: 100px 0px;
+}
+
+.mat-form-field {
+  width: 100%;
+  min-width: 300px !important;
+}
+
+mat-card-title,
+mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
+.error {
+  padding: 16px;
+  width: 300px;
+  color: white;
+  background-color: red;
+}
+
+.button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.redirectToSingUp {
+  padding: 15px 0 0;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  display: block;
+  color: white;
+  text-decoration: underline;
+   cursor: pointer;
+}
+
+.forgotPassword {
+  text-align: center;
+  margin: -12px 0 15px 0;
+  float: left;
+  width: 100%;
+}
+
+.forgotPassword span {
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-block;
+  padding-top: 20px;
+}
+
+.signin-button{
+  background: #19282477;
+}
