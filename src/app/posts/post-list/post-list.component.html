@@ -1,4 +1,4 @@
-<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-spinner *ngIf="isLoading && posts.length == 0"></mat-spinner>
 <div >
   <div *ngFor="let post of posts; let i = index; let last = last" style="margin-bottom: 20px;">
     <mat-card style="padding-bottom: 16px; background: #30403c;">
