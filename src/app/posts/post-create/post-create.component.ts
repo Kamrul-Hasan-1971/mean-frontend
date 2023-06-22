@@ -31,11 +31,20 @@ export class PostCreateComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.authStatusSub = this.authService
-      .getAuthStatusListener()
-      .subscribe(authStatus => {
+    this.subscribeAuthStatus();
+    this.initForm();
+    this.subscribeRoute();
+  }
+
+  subscribeAuthStatus(){
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
         this.isLoading = false;
-      });
+      }
+    );
+  }
+
+  initForm(){
     this.form = new FormGroup({
       title: new FormControl("1"),
       content: new FormControl(null, { validators: [Validators.required] }),
@@ -44,6 +53,9 @@ export class PostCreateComponent implements OnInit, OnDestroy {
         asyncValidators: [mimeType]
       })
     });
+  }
+
+  subscribeRoute(){
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has("postId")) {
         this.mode = "edit";
@@ -58,6 +70,7 @@ export class PostCreateComponent implements OnInit, OnDestroy {
             imagePath: postData.imagePath,
             creator: postData.creator
           };
+          this.imagePreview = this.post.imagePath;
           this.form.setValue({
             title: this.post.title,
             content: this.post.content,
@@ -66,7 +79,6 @@ export class PostCreateComponent implements OnInit, OnDestroy {
         });
       } else {
         this.mode = "create";
-        this.postId = null;
       }
     });
   }

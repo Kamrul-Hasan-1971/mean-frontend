@@ -12,7 +12,7 @@ const BACKEND_URL = environment.apiUrl + "/posts/";
 @Injectable({ providedIn: "root" })
 export class PostsService {
   private posts: Post[] = [];
-  private postsUpdated = new Subject<{ posts: Post[]; postCount: number }>();
+  private postsFetched = new Subject<{ posts: Post[]; postCount: number }>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -40,15 +40,15 @@ export class PostsService {
       )
       .subscribe(transformedPostData => {
         this.posts = transformedPostData.posts;
-        this.postsUpdated.next({
+        this.postsFetched.next({
           posts: [...this.posts],
           postCount: transformedPostData.maxPosts
         });
       });
   }
 
-  getPostUpdateListener() {
-    return this.postsUpdated.asObservable();
+  getPostsFetchedListener() {
+    return this.postsFetched.asObservable();
   }
 
   getPost(id: string) {

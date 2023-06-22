@@ -21,11 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initLogInForm();
-    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
-      authStatus => {
-        this.isLoading = false;
-      }
-    );
+    this.subscribeAuthStatus();
   }
 
   initLogInForm() {
@@ -35,6 +31,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
+  subscribeAuthStatus(){
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
+  }
 
   get f() { return this.loginForm.controls; }
 

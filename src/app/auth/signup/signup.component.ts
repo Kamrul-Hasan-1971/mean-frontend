@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup, NgForm, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
-
 import { AuthService } from "../auth.service";
 
 @Component({
@@ -20,18 +19,23 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initSignUpForm();
-    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
-      authStatus => {
-        this.isLoading = false;
-      }
-    );
+    this.subscribeAuthStatus();
   }
+
   initSignUpForm() {
     this.signUpForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required],
     });
+  }
+
+  subscribeAuthStatus(){
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
   }
 
   get f() { return this.signUpForm.controls; }
@@ -41,7 +45,6 @@ export class SignupComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
-    console.log(this.signUpForm.value);
     this.authService.createUser(this.signUpForm.value.email, this.signUpForm.value.password, this.signUpForm.value.confirmPassword);
   }
 

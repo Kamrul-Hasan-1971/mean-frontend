@@ -5,6 +5,7 @@ import { Subject } from "rxjs";
 
 import { environment } from "../../environments/environment";
 import { AuthDataLogin, AuthDataSignUp } from "./auth-data.model";
+import { SHA256 } from 'crypto-js';
 
 const BACKEND_URL = environment.apiUrl + "/user/";
 
@@ -35,7 +36,7 @@ export class AuthService {
   }
 
   createUser(email: string, password: string, confirmPassword: string) {
-    const authData: AuthDataSignUp = { email: email, password: password, confirmPassword:confirmPassword  };
+    const authData: AuthDataSignUp = { email: email, password: SHA256(password).toString(), confirmPassword:SHA256(confirmPassword).toString()};
     this.http.post(BACKEND_URL + "/signup", authData).subscribe(
       () => {
         this.router.navigate(["/"]);
@@ -47,7 +48,7 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    const authData: AuthDataLogin = { email: email, password: password };
+    const authData: AuthDataLogin = { email: email, password: SHA256(password).toString()};
     this.http
       .post<{ token: string; expiresIn: number; userId: string }>(
         BACKEND_URL + "/login",

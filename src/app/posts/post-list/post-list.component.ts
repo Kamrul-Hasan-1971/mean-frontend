@@ -27,7 +27,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   private errorSub: Subscription
 
   constructor(
-    public postsService: PostsService,
+    private postsService: PostsService,
     private authService: AuthService,
     private errorService: ErrorService
   ) {}
@@ -46,7 +46,7 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   getAllPosts(){
     this.postsSub = this.postsService
-    .getPostUpdateListener()
+    .getPostsFetchedListener()
     .subscribe((postData: { posts: Post[]; postCount: number }) => {
       this.isLoading = false;
       this.totalPosts = postData.postCount;

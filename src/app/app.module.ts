@@ -31,6 +31,6 @@ import { PostsModule } from "./posts/posts.module";
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
-  entryComponents: [ErrorComponent]
+  entryComponents: []
 })
 export class AppModule {}
