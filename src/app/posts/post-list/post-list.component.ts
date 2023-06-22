@@ -5,6 +5,7 @@ import { Subscription } from "rxjs";
 import { Post } from "../post.model";
 import { PostsService } from "../posts.service";
 import { AuthService } from "../../auth/auth.service";
+import { ErrorService } from "src/app/error/error.service";
 
 @Component({
   selector: "app-post-list",
@@ -23,37 +24,55 @@ export class PostListComponent implements OnInit, OnDestroy {
   userId: string;
   private postsSub: Subscription;
   private authStatusSub: Subscription;
+  private errorSub: Subscription
 
   constructor(
     public postsService: PostsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private errorService: ErrorService
   ) {}
 
   ngOnInit() {
+    this.subscribeError();
     this.isLoading = true;
     this.postsPerPage = parseInt(localStorage.getItem("postsPerPage")) || 2;
     this.currentPage = parseInt(localStorage.getItem("currentPage")) || 1;
     this.postsService.getPosts(this.postsPerPage, this.currentPage);
     this.userId = this.authService.getUserId();
-    this.postsSub = this.postsService
-      .getPostUpdateListener()
-      .subscribe((postData: { posts: Post[]; postCount: number }) => {
-        this.isLoading = false;
-        this.totalPosts = postData.postCount;
-        this.posts = postData.posts;
-        for( let i = 0 ; i < this.posts.length; i++){
-          this.posts[i].isImageLoading = true;
-          this.loadImageAsync(i);
-        }
-      });
+    this.getAllPosts();
     this.userIsAuthenticated = this.authService.getIsAuth();
-    this.authStatusSub = this.authService
-      .getAuthStatusListener()
-      .subscribe(isAuthenticated => {
-        this.userIsAuthenticated = isAuthenticated;
-        this.userId = this.authService.getUserId();
-      });
+    this.subscribeAuthStatus();
   }
+
+  getAllPosts(){
+    this.postsSub = this.postsService
+    .getPostUpdateListener()
+    .subscribe((postData: { posts: Post[]; postCount: number }) => {
+      this.isLoading = false;
+      this.totalPosts = postData.postCount;
+      this.posts = postData.posts;
+      for( let i = 0 ; i < this.posts.length; i++){
+        this.posts[i].isImageLoading = true;
+        this.loadImageAsync(i);
+      }
+    });
+  }
+
+  subscribeAuthStatus(){
+    this.authStatusSub = this.authService
+    .getAuthStatusListener()
+    .subscribe(isAuthenticated => {
+      this.userIsAuthenticated = isAuthenticated;
+      this.userId = this.authService.getUserId();
+    });
+  }
+
+  subscribeError(){
+    this.errorSub = this.errorService.getErrorListener().subscribe(err=>{
+      this.isLoading = false;
+    })
+  }
+
   loadImageAsync(i) {
     var downloadingImage = new Image();
     downloadingImage.onload = () => {
@@ -89,5 +108,6 @@ export class PostListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.postsSub.unsubscribe();
     this.authStatusSub.unsubscribe();
+    this.errorSub.unsubscribe();
   }
 }
