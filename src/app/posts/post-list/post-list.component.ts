@@ -53,7 +53,7 @@ export class PostListComponent implements OnInit, OnDestroy {
       this.posts = postData.posts;
       for( let i = 0 ; i < this.posts.length; i++){
         this.posts[i].isImageLoading = true;
-        this.loadImageAsync(i);
+        this.loadImageAsync(this.posts[i]);
       }
     });
   }
@@ -73,17 +73,23 @@ export class PostListComponent implements OnInit, OnDestroy {
     })
   }
 
-  loadImageAsync(i) {
+  loadImageAsync(post: Post) {
     var downloadingImage = new Image();
     downloadingImage.onload = () => {
-      const imgContainer: HTMLElement = document.getElementById(this.posts[i].id) as HTMLElement;
+      const imgContainer: HTMLElement = document.getElementById(post.id) as HTMLElement;
       imgContainer.appendChild(downloadingImage);
-      this.posts[i].isImageLoading = false;
+      post.isImageLoading = false;
     };
     downloadingImage.onerror = (err) => {
-      console.error("Error during loading image from server, error", err, "vehicle details", this.posts[i].imagePath);
+      const imgContainer: HTMLElement = document.getElementById(post.id) as HTMLElement;
+      imgContainer.innerText = "Error during loading image from server.";
+      imgContainer.style.color = 'lightgray';
+      imgContainer.style.fontWeight = "500";
+      imgContainer.style.fontFamily = "Roboto";
+      post.isImageLoading = false;
+      console.error("Error during loading image from server, error", err, "vehicle details", post.imagePath);
     }
-    downloadingImage.src = this.posts[i].imagePath;
+    downloadingImage.src = post.imagePath;
     downloadingImage.className = "post-image-img"
   }
 
